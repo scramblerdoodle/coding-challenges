@@ -1,64 +1,57 @@
-# 0-1 Knapsack Problem
+"""
+----------------------------------------------------------------------------------------------------
+QUESTION 6: 0-1 Knapsack Problem
+
+Think that you have an unlimited number of carrots, but a limited number of carrot types.
+Moreover, you have one bag that can hold a limited weight.
+Each type of carrot has a weight and a price.
+
+Write a function that takes carrot_types and capacity
+and returns the maximum value the bag can hold.
+----------------------------------------------------------------------------------------------------
+
+Classic Knapsack problem, a notorious combinatorial NP problem. It's been quite a few years since
+I've studied it.
+
+The most well-known solution for the 0-1 Knapsack problem is by using dynamic programming, which
+runs in pseudo-polynomial time.
+
+The code was inspired in the approach suggested via pseudocode in the wiki page for the
+Knapsack problem:
+    https://en.wikipedia.org/wiki/Knapsack_problem
+"""
 
 
-def knapsack_recursive(
-    capacity: int, weights: list[int], profits: list[int], number_items: int
-):
+def knapsack(capacity: int, weights: list, profits: list) -> int:
+    """Calculates the maximum value a bag can hold in the 0-1 Knapsack problem."""
 
-    # Base Case
-    if number_items == 0 or capacity == 0:
-        return 0
-
-    # If weight of the nth item is
-    # more than Knapsack of capacity W,
-    # then this item cannot be included
-    # in the optimal solution
-    if weights[number_items - 1] > capacity:
-        return knapsack_recursive(capacity, weights, profits, number_items - 1)
-
-    # return the maximum of two cases:
-    # (1) nth item included
-    # (2) not included
-    else:
-        return max(
-            profits[number_items - 1]
-            + knapsack_recursive(
-                capacity - weights[number_items - 1], weights, profits, number_items - 1
-            ),
-            knapsack_recursive(capacity, weights, profits, number_items - 1),
-        )
-
-
-def knapsack_dynamic(capacity: int, weights: list, profits: list):
+    # Sanity check for the input
     if len(weights) != len(profits):
         raise ValueError("Weights and profits must have same size")
 
-    amount_options = len(weights)
+    # Number of options to be inserted into the bag
+    number_items = len(weights)
 
-    knapsack_table = [
-        [0 for _ in range(capacity + 1)] for _ in range(amount_options + 1)
-    ]
+    # Table to find the solution
+    table = [[0 for _ in range(capacity + 1)] for _ in range(number_items + 1)]
 
-    for i in range(amount_options + 1):
-        for j in range(capacity + 1):
-
-            if i == 0 or j == 0:
-                knapsack_table[i][j] = 0
-
-            elif weights[i - 1] <= j:
-                knapsack_table[i][j] = max(
-                    profits[i - 1] + knapsack_table[i - 1][j - weights[i - 1]],
-                    knapsack_table[i - 1][j],
+    # Conditions risen from the definition of the knapsack problem
+    for i in range(1, number_items + 1):
+        for j in range(1, capacity + 1):
+            if weights[i - 1] > j:
+                table[i][j] = table[i - 1][j]
+            else:
+                table[i][j] = max(
+                    table[i - 1][j], table[i - 1][j - weights[i - 1]] + profits[i - 1]
                 )
 
-            else:
-                knapsack_table[i][j] = knapsack_table[i - 1][j]
-
-    return knapsack_table[amount_options][capacity]
+    # The value stored in the final position of the matrix is the maximum value the bag can hold
+    return table[number_items][capacity]
 
 
 def get_max_value(carrot_types: list[dict], capacity: int) -> int:
-    return knapsack_dynamic(
+    """Gets the maximum value the bag can hold given a variety of carrot types and a bag capacity"""
+    return knapsack(
         capacity,
         weights=[carrot["kg"] for carrot in carrot_types],
         profits=[carrot["price"] for carrot in carrot_types],
