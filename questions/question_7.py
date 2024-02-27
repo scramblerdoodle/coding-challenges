@@ -65,4 +65,7 @@ if __name__ == "__main__":
         {"kg": 3, "price": 70},
     ]
     capacity = 36
-    print(get_max_value(carrot_types, capacity))
+    print("0-1 Knapsack\n")
+    print("Items:\n", carrot_types)
+    print("Bag capacity:", capacity)
+    print("Maximum value the bag can hold:", get_max_value(carrot_types, capacity))
