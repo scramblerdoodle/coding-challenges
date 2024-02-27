@@ -43,6 +43,7 @@ if __name__ == "__main__":
     print("QUESTION 6:")
     print("Achilles and the Tortoise")
     zenos_paradox(0.5, 64)
+    print()
 
     # QUESTION 7
     print("QUESTION 7:")
@@ -52,7 +53,7 @@ if __name__ == "__main__":
         {"kg": 3, "price": 70},
     ]
     print(f"Carrot types: {carrot_types}")
-    capacity = 36  # kg
+    capacity = 36
     print(f"Bag capacity: {capacity}")
 
     print(f"Maximum value the bag can hold: {get_max_value(carrot_types, capacity)}")
