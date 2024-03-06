@@ -7,7 +7,7 @@ To clone and run this project, you'll need `git` and `python` installed on your 
 
 ```sh
 # Clone this repository
-$ git clone https://github.com/scramblerdoodle/coding-challenges
+$ git clone https://github.com/scramblerdoodle/coding-challenges.git
 
 # Go into the repository
 $ cd coding-challenges
